@@ -2,6 +2,7 @@ package env
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 	"syscall"
@@ -44,17 +45,17 @@ func ParseEnv(v interface{}) error {
 		}
 		if !strings.Contains(tag, ",") {
 			if _, err := GetEnv(tag, f.Addr().Interface()); err != nil {
-				return err
+				return fmt.Errorf("env.ParseEnv: %s: %s", tag, err)
 			}
 		} else {
 			s := strings.SplitN(tag, ",", 2)
 			ok, err := GetEnv(s[0], f.Addr().Interface())
 			if err != nil {
-				return err
+				return fmt.Errorf("env.ParseEnv: %s: %s", s[0], err)
 			}
 			if !ok {
 				if err := text.Unmarshal(s[1], f.Addr().Interface()); err != nil {
-					return err
+					return fmt.Errorf("env.ParseEnv: %s: %s", s[0], err)
 				}
 			}
 		}
