@@ -37,7 +37,6 @@ func ParseEnv(v interface{}) error {
 			if err := ParseEnv(f.Addr().Interface()); err != nil {
 				return err
 			}
-			continue
 		}
 		tag, ok := t.Field(i).Tag.Lookup("env")
 		if !ok {
